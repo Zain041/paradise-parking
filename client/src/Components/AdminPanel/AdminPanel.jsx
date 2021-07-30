@@ -70,7 +70,7 @@ const AdminPanel = () => {
                   src='admin/assets/images/users/avatar-1.jpg'
                   alt='userImage'
                   height={42}
-                  className='rounded-circle shadow-sm'
+                  className='shadow-sm rounded-circle'
                 />
                 <span className='leftbar-user-name'>Dominic Keller</span>
               </span>
@@ -412,7 +412,7 @@ const AdminPanel = () => {
                   </ul>
                 </div>
               </li>
-              <li className='side-nav-title side-nav-item mt-1'>Components</li>
+              <li className='mt-1 side-nav-title side-nav-item'>Components</li>
               <li className='side-nav-item'>
                 <a
                   data-bs-toggle='collapse'
@@ -430,7 +430,7 @@ const AdminPanel = () => {
                       <Link to='/coupancreate'>Create Coupen Code</Link>
                     </li>
                     <li>
-                      <a href='ui-alerts.html'>Alerts</a>
+                      <Link to='/userinvoices'>Invoices</Link>
                     </li>
                     <li>
                       <a href='ui-avatars.html'>Avatars</a>
@@ -793,7 +793,7 @@ const AdminPanel = () => {
               </li>
             </ul>
             {/* Help Box */}
-            <div className='help-box help-box-light text-center'>
+            <div className='text-center help-box help-box-light'>
               <a
                 href='javascript: void(0);'
                 className='float-end close-btn text-body'>

@@ -11,8 +11,9 @@ import Inovice from "./Components/userPanel/userPanelMenus/Inovice";
 import MessengerCustomerChat from "react-messenger-customer-chat";
 import CreateBlog from "./Components/AdminPanel/AdminBlog/createblog/CreateBlog";
 import CreateCoupan from "./Components/AdminPanel/Coupen/createcoupan/CreateCoupan";
-import privacy from './Components/privacy'
-import terms from './Components/terms'
+import Inovices from "./Components/AdminPanel/invoice/Invoices";
+import privacy from "./Components/privacy";
+import terms from "./Components/terms";
 const App = () => {
   useEffect(() => {
     runScripts();
@@ -35,6 +36,7 @@ const App = () => {
         <AdminRoute exact path="/adminpanel" component={AdminPanel} />
         <AdminRoute exact path="/coupancreate" component={CreateCoupan} />
         <AdminRoute exact path="/createpost" component={CreateBlog} />
+        <AdminRoute exact path="/userinvoices" component={Inovices} />
         <PrivateRoute exact path="/checkout" component={Checkout} />
         <PrivateRoute exact path="/userdashboard" component={Userpanel} />
         <PrivateRoute

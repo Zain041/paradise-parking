@@ -22,14 +22,39 @@ const HomePage = () => {
   const [location, setLocation] = useState(0);
   const [days, setdays] = useState(0)
   const [price, setprice] = useState(0);
+  const [code,setCode]=useState('')
+  const [admincode,setAdmincode]=useState(false)
+  const [discount,setdiscount]=useState('10')
+  const [discountValue,setdiscountValue]=useState(false)
 
+  const changeHandler=(e)=>{
+    setCode([e.target.name]= e.target.value)
+  }
+console.log(code,admincode)
+const Accepthandle=()=>{
+  if(admincode===code){
+    setAdmincode(false)
+    setdiscountValue(true)
+     addToast(`Congratulation you have got ${discount}% discount`, {
+        appearance: 'info',
+        autoDismiss: true,
+      });
+      
+  }
+  else{
+   addToast('Invalid code', {
+        appearance: 'error',
+        autoDismiss: true,
+      });
+  }
+}
 
 
   useEffect(async() => {
     runScripts();
     AdminPageScriptsRun(false);
-    // const res=await axios.get(`/api/getpost/${'6101585394c6b66891280832'}`)
-    // console.log(res)
+    const res=await axios.get(`/api/coupon_get`)
+    setAdmincode(res.data.user[0].code)
   }, [runScripts,AdminPageScriptsRun]);
 
   const changePlaceHandler = (e) => {
@@ -88,6 +113,8 @@ const HomePage = () => {
         location,
         booking,
         price,
+        discount,
+        discountValue,
       };
       context.newBooking(bookingDetails);
       history.push("/checkout");
@@ -98,21 +125,30 @@ const HomePage = () => {
       });
     }
   };
-  console.log(location);
+  // console.log(location);
   return (
     <>
       <Header />
 
       <main>
         <section
-          className="section section-header section-image bg-primary overlay-primary text-white pb-4 pb-md-7"
+          className="pb-4 text-white section section-header section-image bg-primary overlay-primary pb-md-7"
           data-background="assets/img/hero-1.jpg"
         >
           <div className="container">
-            <div className="row justify-content-center mb-4 mb-xl-5">
-              <div className="col-12 col-xl-10 text-center">
+            <div className="mb-4 row justify-content-center mb-xl-5">
+              <div className="text-center col-12 col-xl-10">
+                {admincode?<div className='notification'>
+                
+                   <div class="sticky" style={{width:'300px',backgroundColor:'#a30a0a',padding:'20px',borderRadius:'50px',margin:'0 auto'}}>
+                     <p>You have received Coupan code Enter the code and get the {discount}% discount</p>
+                     <h2>Code : {admincode}</h2>
+                     <input type="text" id="code" value={code} onChange={changeHandler} class="fadeIn second" name="code" placeholder="Enter coupan code"/>   
+                     <button  onClick={Accepthandle}>Submit</button>          
+                   </div>
+                </div>:null}
                 <h1 className="display-2">Find Parking In Seconds</h1>
-                <p className="lead text-muted mt-4 px-md-6">
+                <p className="mt-4 lead text-muted px-md-6">
                   <span className="font-weight-bold">
                     Parking Just Got A Lot Simpler.
                     {i18n.t("Welcome to React")}
@@ -122,10 +158,10 @@ const HomePage = () => {
                 </p>
               </div>
             </div>
-            <div className="row mb-5">
+            <div className="mb-5 row">
               <div className="col-12">
                 <div className="card p-md-2">
-                  <div className="card-body p-2 p-md-0">
+                  <div className="p-2 card-body p-md-0">
                     <div
                       autoComplete="off"
                       className="row"
@@ -162,7 +198,7 @@ const HomePage = () => {
                         </div>
                       </div>
                       <div className="col-12 col-lg-4 ">
-                        <div className="input-group input-group-lg mb-2 mb-lg-0">
+                        <div className="mb-2 input-group input-group-lg mb-lg-0">
                           <div className="input-group-prepend">
                             <span className="input-group-text">
                               <i className="far fa-calendar-alt" />
@@ -181,15 +217,15 @@ const HomePage = () => {
                           <span></span>
                         </div>
                       </div>
-                      <div className="col-12 col-lg-4 mt-2">
+                      <div className="mt-2 col-12 col-lg-4">
                         <span className="form-control">
                           <label>Price/day</label>
                           <span> ${price}</span>
                         </span>
                       </div>
 
-                      <div className="col-12 col-lg-4 mt-1">
-                        <div className="input-group input-group-lg mb-3 mb-lg-0">
+                      <div className="mt-1 col-12 col-lg-4">
+                        <div className="mb-3 input-group input-group-lg mb-lg-0">
                           <input
                             onChange={changePriceHandler}
                             className='form-control'
@@ -202,7 +238,7 @@ const HomePage = () => {
 
                       <div className="col-12 col-lg-4">
                         <div
-                          className="input-group input-group-lg mb-3 mb-lg-0"
+                          className="mb-3 input-group input-group-lg mb-lg-0"
                           style={{ width: "900px" }}
                         >
                           <div className="input-group-prepend">
@@ -230,7 +266,7 @@ const HomePage = () => {
                         </div>
                       </div>
 
-                      <div className="col-12 col-lg-4 mt-2">
+                      <div className="mt-2 col-12 col-lg-4">
                         <button
                           className="btn btn-lg btn-primary btn-block animate-up-2"
                           onClick={submitHandler}
@@ -246,8 +282,8 @@ const HomePage = () => {
 
             <div className="row justify-content-center">
               <div className="col">
-                <ul className="d-flex flex-wrap justify-content-center list-unstyled mb-0">
-                  <li className="mx-xl-4 mx-2 mb-5 mb-md-0">
+                <ul className="flex-wrap mb-0 d-flex justify-content-center list-unstyled">
+                  <li className="mx-2 mb-5 mx-xl-4 mb-md-0">
                     <div className="header-points-items-stying">
                       <span className="header-check-circle-points">
                         <svg
@@ -266,7 +302,7 @@ const HomePage = () => {
                       <span>Space Availability Guarantee</span>
                     </div>
                   </li>
-                  <li className="mx-xl-4 mx-2 mb-5 mb-md-0">
+                  <li className="mx-2 mb-5 mx-xl-4 mb-md-0">
                     <div className="header-points-items-stying">
                       <span className="header-check-circle-points">
                         <svg
@@ -285,7 +321,7 @@ const HomePage = () => {
                       <span>Satisfaction Guarantee</span>
                     </div>
                   </li>
-                  <li className="mx-xl-4 mx-2 mb-5 mb-md-0">
+                  <li className="mx-2 mb-5 mx-xl-4 mb-md-0">
                     <div className="header-points-items-stying">
                       <span className="header-check-circle-points">
                         <svg
@@ -309,12 +345,12 @@ const HomePage = () => {
             </div>
           </div>
         </section>
-        <section className="section section-lg pb-lg-6 pb-5">
+        <section className="pb-5 section section-lg pb-lg-6">
           <div className="container">
             <div className="row">
-              <div className="col-12 col-sm-6 col-md-4 text-center mb-4 mb-md-0 px-lg-4">
+              <div className="mb-4 text-center col-12 col-sm-6 col-md-4 mb-md-0 px-lg-4">
                 <img
-                  className="img-fluid image-lg mb-4"
+                  className="mb-4 img-fluid image-lg"
                   src="https://demo.themesberg.com/spaces/assets/img/illustrations/easy-transaction.svg"
                   alt="northwestern logo"
                 />
@@ -324,9 +360,9 @@ const HomePage = () => {
                   &amp; pick the place that’s best for you.
                 </p>
               </div>
-              <div className="col-12 col-sm-6 col-md-4 text-center mb-4 mb-md-0 px-lg-4">
+              <div className="mb-4 text-center col-12 col-sm-6 col-md-4 mb-md-0 px-lg-4">
                 <img
-                  className="img-fluid image-lg mb-4"
+                  className="mb-4 img-fluid image-lg"
                   src="https://demo.themesberg.com/spaces/assets/img/illustrations/payment.svg"
                   alt="northwestern logo"
                 />
@@ -336,9 +372,9 @@ const HomePage = () => {
                   standard rates by online booking.
                 </p>
               </div>
-              <div className="col-12 col-sm-6 col-md-4 text-center mb-4 mb-md-0 px-lg-4">
+              <div className="mb-4 text-center col-12 col-sm-6 col-md-4 mb-md-0 px-lg-4">
                 <img
-                  className="img-fluid image-lg mb-4"
+                  className="mb-4 img-fluid image-lg"
                   src="https://demo.themesberg.com/spaces/assets/img/illustrations/support.svg"
                   alt="northwestern logo"
                 />
@@ -349,10 +385,10 @@ const HomePage = () => {
                 </p>
               </div>
             </div>
-            <div className="row mt-6">
+            <div className="mt-6 row">
               <div className="col-12">
-                <div className="card rounded border border-light">
-                  <div className="card-body p-2 p-md-4">
+                <div className="border rounded card border-light">
+                  <div className="p-2 card-body p-md-4">
                     <div className="progress-info info-xl d-block d-md-flex position-relative">
                       <img
                         className="card-img-top rounded-xl amz-banner-img-amz"
@@ -364,21 +400,21 @@ const HomePage = () => {
                 </div>
               </div>
             </div>
-            <div className="row mt-6">
+            <div className="mt-6 row">
               <div className="col-12">
-                <h3 className="h4 mb-5">Our Top Car Parks</h3>
+                <h3 className="mb-5 h4">Our Top Car Parks</h3>
               </div>
-              <div className="col-12 col-sm-6 col-lg-3 mb-4 mb-lg-0">
+              <div className="mb-4 col-12 col-sm-6 col-lg-3 mb-lg-0">
                 {" "}
                 <a
                   href="javascript:void();"
-                  className="card img-card fh-400 border-0 outer-bg"
+                  className="border-0 card img-card fh-400 outer-bg"
                   data-background-inner="../assets/img/newyork.jpg"
                 >
                   <div className="inner-bg overlay-dark" />
                   <div className="card-img-overlay d-flex align-items-center">
-                    <div className="card-body text-white p-3">
-                      <h5 className="text-uppercase text-center">
+                    <div className="p-3 text-white card-body">
+                      <h5 className="text-center text-uppercase">
                         CIVITAVECCHIA
                       </h5>
                       <p className="text-center">Port of Rome</p>
@@ -386,49 +422,49 @@ const HomePage = () => {
                   </div>
                 </a>
               </div>
-              <div className="col-12 col-sm-6 col-lg-3 mb-4 mb-lg-0">
+              <div className="mb-4 col-12 col-sm-6 col-lg-3 mb-lg-0">
                 {" "}
                 <a
                   href="javascript:void();"
-                  className="card img-card fh-400 border-0 outer-bg"
+                  className="border-0 card img-card fh-400 outer-bg"
                   data-background-inner="../assets/img/paris.jpg"
                 >
                   <div className="inner-bg overlay-dark" />
                   <div className="card-img-overlay d-flex align-items-center">
-                    <div className="card-body text-white p-3">
-                      <h5 className="text-uppercase text-center">FIUMICINO</h5>
+                    <div className="p-3 text-white card-body">
+                      <h5 className="text-center text-uppercase">FIUMICINO</h5>
                       <p className="text-center">Rome Airport</p>
                     </div>
                   </div>
                 </a>
               </div>
-              <div className="col-12 col-sm-6 col-lg-3 mb-4 mb-lg-0">
+              <div className="mb-4 col-12 col-sm-6 col-lg-3 mb-lg-0">
                 {" "}
                 <a
                   href="javascript:void();"
-                  className="card img-card fh-400 border-0 outer-bg"
+                  className="border-0 card img-card fh-400 outer-bg"
                   data-background-inner="../assets/img/london.jpg"
                 >
                   <div className="inner-bg overlay-dark" />
                   <div className="card-img-overlay d-flex align-items-center">
-                    <div className="card-body text-white p-3">
-                      <h5 className="text-uppercase text-center">MALPENSA</h5>
+                    <div className="p-3 text-white card-body">
+                      <h5 className="text-center text-uppercase">MALPENSA</h5>
                       <p className="text-center">Milan Airport</p>
                     </div>
                   </div>
                 </a>
               </div>
-              <div className="col-12 col-sm-6 col-lg-3 mb-4 mb-lg-0">
+              <div className="mb-4 col-12 col-sm-6 col-lg-3 mb-lg-0">
                 {" "}
                 <a
                   href="javascript:void();"
-                  className="card img-card fh-400 border-0 outer-bg"
+                  className="border-0 card img-card fh-400 outer-bg"
                   data-background-inner="../assets/img/tokyo.jpg"
                 >
                   <div className="inner-bg overlay-dark" />
                   <div className="card-img-overlay d-flex align-items-center">
-                    <div className="card-body text-white p-3">
-                      <h5 className="font-weight-normal text-uppercase text-center">
+                    <div className="p-3 text-white card-body">
+                      <h5 className="text-center font-weight-normal text-uppercase">
                         PUNTA RAISI
                       </h5>
                       <p className="text-center">Palermo airport</p>
@@ -437,16 +473,16 @@ const HomePage = () => {
                 </a>
               </div>
             </div>
-            <div className="row mt-6">
+            <div className="mt-6 row">
               <div className="col-12">
-                <h3 className="h4 mb-5">Trending Parkings</h3>
+                <h3 className="mb-5 h4">Trending Parkings</h3>
               </div>
               <div className="col-12 col-md-6 col-lg-4">
-                <div className="card border-light mb-4 animate-up-5">
+                <div className="mb-4 card border-light animate-up-5">
                   <a href="javascript: void();" className="position-relative">
                     <img
                       src="../assets/img/image-office.jpg"
-                      className="card-img-top p-2 rounded-xl"
+                      className="p-2 card-img-top rounded-xl"
                       alt="YourParadisePark office"
                     />
                   </a>
@@ -454,27 +490,27 @@ const HomePage = () => {
                     <a href="javascript: void();">
                       <h4 className="h5">CIVITAVECCHIA</h4>
                     </a>
-                    <div className="d-flex my-4">
+                    <div className="my-4 d-flex">
                       <span className="star fas fa-star text-warning" />{" "}
                       <span className="star fas fa-star text-warning" />{" "}
                       <span className="star fas fa-star text-warning" />
                       <span className="star fas fa-star text-warning" />{" "}
                       <span className="star fas fa-star text-warning" />{" "}
-                      <span className="badge badge-pill badge-primary ml-2">
+                      <span className="ml-2 badge badge-pill badge-primary">
                         5.0
                       </span>
                     </div>
-                    <ul className="list-group mb-3">
-                      <li className="list-group-item small p-0">
-                        <span className="fas fa-map-marker-alt mr-2" />
+                    <ul className="mb-3 list-group">
+                      <li className="p-0 list-group-item small">
+                        <span className="mr-2 fas fa-map-marker-alt" />
                         New York, Manhattan, USA
                       </li>
-                      <li className="list-group-item small p-0">
-                        <span className="fas fa-bullseye mr-2" />
+                      <li className="p-0 list-group-item small">
+                        <span className="mr-2 fas fa-bullseye" />
                         Old Street (2 mins walk)
                       </li>
-                      <li className="list-group-item small p-0">
-                        <span className="fas fa-bullseye mr-2" />
+                      <li className="p-0 list-group-item small">
+                        <span className="mr-2 fas fa-bullseye" />
                         Shoreditch High Street (10 mins walk)
                       </li>
                     </ul>
@@ -483,11 +519,11 @@ const HomePage = () => {
                 </div>
               </div>
               <div className="col-12 col-md-6 col-lg-4">
-                <div className="card border-light mb-4 animate-up-5">
+                <div className="mb-4 card border-light animate-up-5">
                   <a href="javascript: void();" className="position-relative">
                     <img
                       src="../assets/img/cowork-office.jpg"
-                      className="card-img-top p-2 rounded-xl"
+                      className="p-2 card-img-top rounded-xl"
                       alt="developer desk"
                     />
                   </a>
@@ -495,27 +531,27 @@ const HomePage = () => {
                     <a href="javascript: void();">
                       <h4 className="h5">FIUMICINO</h4>
                     </a>
-                    <div className="d-flex my-4">
+                    <div className="my-4 d-flex">
                       <span className="star fas fa-star text-warning" />{" "}
                       <span className="star fas fa-star text-warning" />{" "}
                       <span className="star fas fa-star text-warning" />{" "}
                       <span className="star fas fa-star text-warning" />{" "}
                       <span className="star fas fa-star text-warning" />
-                      <span className="badge badge-pill badge-primary ml-2">
+                      <span className="ml-2 badge badge-pill badge-primary">
                         5.0
                       </span>
                     </div>
-                    <ul className="list-group mb-3">
-                      <li className="list-group-item small p-0">
-                        <span className="fas fa-map-marker-alt mr-2" />
+                    <ul className="mb-3 list-group">
+                      <li className="p-0 list-group-item small">
+                        <span className="mr-2 fas fa-map-marker-alt" />
                         California, USA
                       </li>
-                      <li className="list-group-item small p-0">
-                        <span className="fas fa-bullseye mr-2" />
+                      <li className="p-0 list-group-item small">
+                        <span className="mr-2 fas fa-bullseye" />
                         Penny Market Street (15 mins walk)
                       </li>
-                      <li className="list-group-item small p-0">
-                        <span className="fas fa-bullseye mr-2" />
+                      <li className="p-0 list-group-item small">
+                        <span className="mr-2 fas fa-bullseye" />
                         Museum Street (20 mins walk)
                       </li>
                     </ul>
@@ -523,11 +559,11 @@ const HomePage = () => {
                 </div>
               </div>
               <div className="col-12 col-md-6 col-lg-4">
-                <div className="card border-light mb-4 animate-up-5">
+                <div className="mb-4 card border-light animate-up-5">
                   <a href="javascript: void();" className="position-relative">
                     <img
                       src="../assets/img/meeting-office.jpg"
-                      className="card-img-top p-2 rounded-xl"
+                      className="p-2 card-img-top rounded-xl"
                       alt="wood office"
                     />
                   </a>
@@ -535,27 +571,27 @@ const HomePage = () => {
                     <a href="javascript: void();">
                       <h4 className="h5">MALPENSA</h4>
                     </a>
-                    <div className="d-flex my-4">
+                    <div className="my-4 d-flex">
                       <span className="star fas fa-star text-warning" />{" "}
                       <span className="star fas fa-star text-warning" />{" "}
                       <span className="star fas fa-star text-warning" />{" "}
                       <span className="star fas fa-star text-warning" />{" "}
                       <span className="star fas fa-star text-warning" />{" "}
-                      <span className="badge badge-pill badge-primary ml-2">
+                      <span className="ml-2 badge badge-pill badge-primary">
                         5.0
                       </span>
                     </div>
-                    <ul className="list-group mb-3">
-                      <li className="list-group-item small p-0">
-                        <span className="fas fa-map-marker-alt mr-2" />
+                    <ul className="mb-3 list-group">
+                      <li className="p-0 list-group-item small">
+                        <span className="mr-2 fas fa-map-marker-alt" />
                         London, Canary Wharf, UK
                       </li>
-                      <li className="list-group-item small p-0">
-                        <span className="fas fa-bullseye mr-2" />
+                      <li className="p-0 list-group-item small">
+                        <span className="mr-2 fas fa-bullseye" />
                         Stamford Bridge Stadium (5 mins walk)
                       </li>
-                      <li className="list-group-item small p-0">
-                        <span className="fas fa-bullseye mr-2" />
+                      <li className="p-0 list-group-item small">
+                        <span className="mr-2 fas fa-bullseye" />
                         Bluebird Chelsea Pub (15 mins walk)
                       </li>
                     </ul>
@@ -567,12 +603,12 @@ const HomePage = () => {
         </section>
         <section className="section section-lg bg-soft">
           <div className="container">
-            <div className="row justify-content-center mb-4 mb-lg-5">
-              <div className="col-12 col-md-8 text-center">
+            <div className="mb-4 row justify-content-center mb-lg-5">
+              <div className="text-center col-12 col-md-8">
                 <h2 className="h1">
                   <span className="font-weight-bold">How</span> it works?
                 </h2>
-                <p className="lead mt-3">
+                <p className="mt-3 lead">
                   Your Paradise Park System is economical in terms of time,
                   personnel and cost, but it provides maximum benefit in
                   optimization of high capacity parking areas.
@@ -580,14 +616,14 @@ const HomePage = () => {
               </div>
             </div>
             <div className="row">
-              <div className="col-12 col-md-10 col-lg-6 mx-auto">
+              <div className="mx-auto col-12 col-md-10 col-lg-6">
                 <div className="nav-wrapper">
                   <ul
-                    className="nav nav-pills nav-fill flex-column flex-sm-row mb-lg-4 mb-0"
+                    className="mb-0 nav nav-pills nav-fill flex-column flex-sm-row mb-lg-4"
                     id="tab-32"
                     role="tablist"
                   >
-                    <li className="nav-item mr-0 mr-sm-2 mr-md-0 mb-3 mb-lg-0">
+                    <li className="mb-3 mr-0 nav-item mr-sm-2 mr-md-0 mb-lg-0">
                       <a
                         className="nav-link flex-sm-fill text-sm-center active"
                         id="tab-find-space"
@@ -597,7 +633,7 @@ const HomePage = () => {
                         aria-controls="find-space"
                         aria-selected="true"
                       >
-                        <span className="far fa-building mr-2" />
+                        <span className="mr-2 far fa-building" />
                         Find Your Booking Space
                       </a>
                     </li>
@@ -611,7 +647,7 @@ const HomePage = () => {
                         aria-controls="submit-space"
                         aria-selected="false"
                       >
-                        <span className="far fa-money-bill-alt mr-2" />
+                        <span className="mr-2 far fa-money-bill-alt" />
                         After Successfull Booking
                       </a>
                     </li>
@@ -628,12 +664,12 @@ const HomePage = () => {
                   >
                     <div className="row">
                       <div className="col-12 col-md-6 col-lg-4">
-                        <div className="card border-light mb-4 mb-lg-0 text-center">
-                          <div className="card-body p-4 px-xl-4 py-xl-6">
-                            <div className="icon icon-shape icon-lg icon-shape-primary mb-4 rounded-circle">
+                        <div className="mb-4 text-center card border-light mb-lg-0">
+                          <div className="p-4 card-body px-xl-4 py-xl-6">
+                            <div className="mb-4 icon icon-shape icon-lg icon-shape-primary rounded-circle">
                               <span className="fas fa-map-pin" />
                             </div>
-                            <h3 className="h5 my-3">1. Book The Service</h3>
+                            <h3 className="my-3 h5">1. Book The Service</h3>
                             <p>
                               Fill out the booking form and you will receive a
                               confirmation on your e-mail address.
@@ -642,12 +678,12 @@ const HomePage = () => {
                         </div>
                       </div>
                       <div className="col-12 col-md-6 col-lg-4">
-                        <div className="card border-light mb-4 mb-lg-0 text-center">
-                          <div className="card-body p-4 px-xl-4 py-xl-6">
-                            <div className="icon icon-shape icon-lg icon-shape-primary mb-4 rounded-circle">
+                        <div className="mb-4 text-center card border-light mb-lg-0">
+                          <div className="p-4 card-body px-xl-4 py-xl-6">
+                            <div className="mb-4 icon icon-shape icon-lg icon-shape-primary rounded-circle">
                               <span className="far fa-calendar-check" />
                             </div>
-                            <h3 className="h5 my-3">
+                            <h3 className="my-3 h5">
                               2. Go to the meeting point
                             </h3>
                             <p>
@@ -658,12 +694,12 @@ const HomePage = () => {
                         </div>
                       </div>
                       <div className="col-12 col-md-6 col-lg-4">
-                        <div className="card border-light mb-4 mb-lg-0 text-center">
-                          <div className="card-body p-4 px-xl-4 py-xl-6">
-                            <div className="icon icon-shape icon-lg icon-shape-primary mb-4 rounded-circle">
+                        <div className="mb-4 text-center card border-light mb-lg-0">
+                          <div className="p-4 card-body px-xl-4 py-xl-6">
+                            <div className="mb-4 icon icon-shape icon-lg icon-shape-primary rounded-circle">
                               <span className="fas fa-mouse-pointer" />
                             </div>
-                            <h3 className="h5 my-3">3. Car Delivery</h3>
+                            <h3 className="my-3 h5">3. Car Delivery</h3>
                             <p>
                               After a quick check of your car you will be issued
                               a copy of the contract so you can enter the
@@ -682,12 +718,12 @@ const HomePage = () => {
                   >
                     <div className="row">
                       <div className="col-12 col-lg-4">
-                        <div className="card border-light mb-4 mb-lg-0 text-center">
-                          <div className="card-body p-3 px-xl-4 py-xl-6">
-                            <div className="icon icon-shape icon-lg icon-shape-secondary mb-4 rounded-circle">
+                        <div className="mb-4 text-center card border-light mb-lg-0">
+                          <div className="p-3 card-body px-xl-4 py-xl-6">
+                            <div className="mb-4 icon icon-shape icon-lg icon-shape-secondary rounded-circle">
                               <span className="fas fa-clipboard-list" />
                             </div>
-                            <h3 className="h5 my-3">4. Take Back Your Car</h3>
+                            <h3 className="my-3 h5">4. Take Back Your Car</h3>
                             <p>
                               Once you have collected any baggage, call us on
                               331 408 9808 the shuttle will already be outside
@@ -698,12 +734,12 @@ const HomePage = () => {
                         </div>
                       </div>
                       <div className="col-12 col-lg-4">
-                        <div className="card border-light mb-4 mb-lg-0 text-center">
-                          <div className="card-body p-3 px-xl-4 py-xl-6">
-                            <div className="icon icon-shape icon-lg icon-shape-secondary mb-4 rounded-circle">
+                        <div className="mb-4 text-center card border-light mb-lg-0">
+                          <div className="p-3 card-body px-xl-4 py-xl-6">
+                            <div className="mb-4 icon icon-shape icon-lg icon-shape-secondary rounded-circle">
                               <span className="far fa-user" />
                             </div>
-                            <h3 className="h5 my-3">5. Review Us</h3>
+                            <h3 className="my-3 h5">5. Review Us</h3>
                             <p>
                               Share your wonderful feedback / comments for
                               others on our facebook pages and google reviews.
@@ -712,12 +748,12 @@ const HomePage = () => {
                         </div>
                       </div>
                       <div className="col-12 col-lg-4">
-                        <div className="card border-light mb-4 mb-lg-0 text-center">
-                          <div className="card-body p-3 px-xl-4 py-xl-6">
-                            <div className="icon icon-shape icon-lg icon-shape-secondary mb-4 rounded-circle">
+                        <div className="mb-4 text-center card border-light mb-lg-0">
+                          <div className="p-3 card-body px-xl-4 py-xl-6">
+                            <div className="mb-4 icon icon-shape icon-lg icon-shape-secondary rounded-circle">
                               <span className="far fa-money-bill-alt" />
                             </div>
-                            <h3 className="h5 my-3">6. Share With Others</h3>
+                            <h3 className="my-3 h5">6. Share With Others</h3>
                             <p>
                               Help us to spread out network, so that we can
                               assisst you maximum. A lot of thanks for your
@@ -733,10 +769,10 @@ const HomePage = () => {
             </div>
           </div>
         </section>
-        <div className="section bg-white">
+        <div className="bg-white section">
           <div className="container">
             <div className="row align-items-center justify-content-center">
-              <div className="col-12 col-lg-9 text-center">
+              <div className="text-center col-12 col-lg-9">
                 <div className="nav-wrapper">
                   <ul
                     className="nav nav-pills nav-pill-circle flex-sm-row justify-content-center"
@@ -745,7 +781,7 @@ const HomePage = () => {
                   >
                     <li className="nav-item">
                       <a
-                        className="nav-link bg-white text-sm-center avatar-link active"
+                        className="bg-white nav-link text-sm-center avatar-link active"
                         id="tab-link-example-13"
                         data-toggle="tab"
                         href="#link-example-13"
@@ -762,7 +798,7 @@ const HomePage = () => {
                     </li>
                     <li className="nav-item">
                       <a
-                        className="nav-link bg-white text-sm-center avatar-link"
+                        className="bg-white nav-link text-sm-center avatar-link"
                         id="tab-link-example-14"
                         data-toggle="tab"
                         href="#link-example-14"
@@ -779,7 +815,7 @@ const HomePage = () => {
                     </li>
                     <li className="nav-item">
                       <a
-                        className="nav-link bg-white text-sm-center avatar-link"
+                        className="bg-white nav-link text-sm-center avatar-link"
                         id="tab-link-example-15"
                         data-toggle="tab"
                         href="#link-example-15"
@@ -797,7 +833,7 @@ const HomePage = () => {
                   </ul>
                 </div>
                 <div className="card">
-                  <div className="card-body p-0">
+                  <div className="p-0 card-body">
                     <div className="tab-content" id="tabcontentexample-5">
                       <div
                         className="tab-pane fade show active"
@@ -805,19 +841,19 @@ const HomePage = () => {
                         role="tabpanel"
                         aria-labelledby="tab-link-example-13"
                       >
-                        <span className="d-block my-3">
+                        <span className="my-3 d-block">
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />
                         </span>
-                        <blockquote className="blockquote bg-white p-0 p-md-4">
+                        <blockquote className="p-0 bg-white blockquote p-md-4">
                           I used YourParaisePark's logo creation services along with
                           their website development services. They have been a
                           pleasure to work with and have been responsive to all
                           questions asked.
-                          <footer className="blockquote-footer mt-3 text-primary">
+                          <footer className="mt-3 blockquote-footer text-primary">
                             Bonnie Green
                           </footer>
                         </blockquote>
@@ -828,20 +864,20 @@ const HomePage = () => {
                         role="tabpanel"
                         aria-labelledby="tab-link-example-14"
                       >
-                        <span className="d-block my-3">
+                        <span className="my-3 d-block">
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />
                         </span>
-                        <blockquote className="blockquote bg-white p-0 p-md-4">
+                        <blockquote className="p-0 bg-white blockquote p-md-4">
                           I have worked with YourParaisePark over the years on a
                           number of projects. I've always found them to be
                           responsive, friendly and up-to-date with all the
                           technology - which everyone knows is constantly
                           changing.
-                          <footer className="blockquote-footer mt-3 text-primary">
+                          <footer className="mt-3 blockquote-footer text-primary">
                             Neil Sims
                           </footer>
                         </blockquote>
@@ -852,19 +888,19 @@ const HomePage = () => {
                         role="tabpanel"
                         aria-labelledby="tab-link-example-15"
                       >
-                        <span className="d-block my-3">
+                        <span className="my-3 d-block">
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />{" "}
                           <span className="star fas fa-star text-warning" />
                         </span>
-                        <blockquote className="blockquote bg-white p-0 p-md-4">
+                        <blockquote className="p-0 bg-white blockquote p-md-4">
                           YourParaisePark are the best in the business for website
                           design and building. They worked hard to give us
                           exactly what we wanted and more for our website and
                           delivered on time. We would definitely use them again.
-                          <footer className="blockquote-footer mt-3 text-primary">
+                          <footer className="mt-3 blockquote-footer text-primary">
                             Christopher Wood
                           </footer>
                         </blockquote>
@@ -877,71 +913,71 @@ const HomePage = () => {
           </div>
         </div>
       </main>
-      <div className="section py-0">
+      <div className="py-0 section">
         <div className="container z-2">
           <div className="row position-relative justify-content-center align-items-cente">
             <div className="col-12">
               <div className="card border-light">
-                <div className="card-body text-left px-5 py-4">
+                <div className="px-5 py-4 text-left card-body">
                   <div className="row align-items-center">
                     <div className="col-md-5">
-                      <p className="lead mb-4">
+                      <p className="mb-4 lead">
                         <h4 className="font-weight-bold">Why Choose Us?</h4>
                       </p>
-                      <div className="row mb-4">
+                      <div className="mb-4 row">
                         <div className="col">
-                          <ul className="list-group mb-3">
-                            <li className="list-group-item text-gray p-0 my-2">
+                          <ul className="mb-3 list-group">
+                            <li className="p-0 my-2 list-group-item text-gray">
                               <Link href="#">
-                                <span className="fas fa-map-marker-alt mr-2" />
+                                <span className="mr-2 fas fa-map-marker-alt" />
                                 Professionalism
                               </Link>
                             </li>
-                            <li className="list-group-item text-gray p-0 my-2">
+                            <li className="p-0 my-2 list-group-item text-gray">
                               <Link href="#">
-                                <span className="fas fa-map-marker-alt mr-2" />
+                                <span className="mr-2 fas fa-map-marker-alt" />
                                 Precision
                               </Link>
                             </li>
-                            <li className="list-group-item text-gray p-0 my-2">
+                            <li className="p-0 my-2 list-group-item text-gray">
                               <Link href="#">
-                                <span className="fas fa-map-marker-alt mr-2" />
+                                <span className="mr-2 fas fa-map-marker-alt" />
                                 Confidence
                               </Link>
                             </li>
                           </ul>
                         </div>
                         <div className="col">
-                          <ul className="list-group mb-3">
-                            <li className="list-group-item text-gray p-0 my-2">
+                          <ul className="mb-3 list-group">
+                            <li className="p-0 my-2 list-group-item text-gray">
                               <Link href="#">
-                                <span className="fas fa-map-marker-alt mr-2" />
+                                <span className="mr-2 fas fa-map-marker-alt" />
                                 Quality price
                               </Link>
                             </li>
-                            <li className="list-group-item text-gray p-0 my-2">
+                            <li className="p-0 my-2 list-group-item text-gray">
                               <Link href="#">
-                                <span className="fas fa-map-marker-alt mr-2" />
+                                <span className="mr-2 fas fa-map-marker-alt" />
                                 Safety &amp; Security
                               </Link>
                             </li>
-                            <li className="list-group-item text-gray p-0 my-2">
+                            <li className="p-0 my-2 list-group-item text-gray">
                               <Link href="#">
-                                <span className="fas fa-map-marker-alt mr-2" />
+                                <span className="mr-2 fas fa-map-marker-alt" />
                                 Safety &amp; Security
                               </Link>
                             </li>
-                            <li className="list-group-item p-0 mt-2">
+                            <li className="p-0 mt-2 list-group-item">
                               <Link href="#">
                                 Book Now
-                                <span className="fas fa-arrow-right fa-xs ml-2" />
+                                <span className="ml-2 fas fa-arrow-right fa-xs" />
                               </Link>
                             </li>
                           </ul>
                         </div>
                       </div>
                     </div>
-                    <div className="col-12 col-md-7 mt-5 mt-md-0 text-md-right d-none d-sm-block">
+                    <div className="mt-5 col-12 col-md-7 mt-md-0 text-md-right d-none d-sm-block">
                       <img
                         src="https://demo.themesberg.com/spaces/assets/img/illustrations/world-map.svg"
                         alt="pic"
@@ -954,10 +990,10 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      <footer className="footer pb-5 bg-primary text-white pt-9 mt-n9">
+      <footer className="pb-5 text-white footer bg-primary pt-9 mt-n9">
         <div className="container">
-          <div className="row mt-6">
-            <div className="col-xl-3 mb-3 mb-xl-0">
+          <div className="mt-6 row">
+            <div className="mb-3 col-xl-3 mb-xl-0">
               <img
                 src="https://demo.themesberg.com/spaces/assets/img/brand/light.svg"
                 height={30}
@@ -966,9 +1002,9 @@ const HomePage = () => {
               />
               <p>Your Paradise Park | Your Vacation Starts With Us.</p>
             </div>
-            <div className="col-6 col-xl-2 mb-5 mb-xl-0">
+            <div className="mb-5 col-6 col-xl-2 mb-xl-0">
               <span className="h5">Hot Links</span>
-              <ul className="footer-links mt-2">
+              <ul className="mt-2 footer-links">
                 <li>
                   <Link to="/blogs">Blog</Link>
                 </li>
@@ -983,13 +1019,13 @@ const HomePage = () => {
                 </li>
               </ul>
             </div>
-            <div className="col-6 col-xl-3 mb-5 mb-xl-0">
+            <div className="mb-5 col-6 col-xl-3 mb-xl-0">
               <span className="h5">Other</span>
-              <ul className="footer-links mt-2">
+              <ul className="mt-2 footer-links">
                 <li>
                   <Link to="#">
                     Documentation{" "}
-                    <span className="badge badge-sm badge-secondary ml-2">
+                    <span className="ml-2 badge badge-sm badge-secondary">
                       v3.0
                     </span>
                   </Link>
@@ -1011,17 +1047,17 @@ const HomePage = () => {
                 </li>
               </ul>
             </div>
-            <div className="col-12 col-xl-4 mb-5 mb-xl-0">
+            <div className="mb-5 col-12 col-xl-4 mb-xl-0">
               <span className="h5">Get the app</span>
-              <p className="text-muted font-small mt-2">
+              <p className="mt-2 text-muted font-small">
                 It's easy. Just select your device.
               </p>
-              <button className="btn btn-sm btn-white mb-xl-0 mr-2 mr-lg-2">
+              <button className="mr-2 btn btn-sm btn-white mb-xl-0 mr-lg-2">
                 <span className="d-flex align-items-center">
-                  <span className="icon icon-brand mr-2">
+                  <span className="mr-2 icon icon-brand">
                     <span className="fab fa-apple" />
                   </span>{" "}
-                  <span className="d-inline-block text-left">
+                  <span className="text-left d-inline-block">
                     <small className="font-weight-normal d-block">
                       Available on
                     </small>{" "}
@@ -1030,10 +1066,10 @@ const HomePage = () => {
                 </span>
               </button>{" "}
               <button className="btn btn-sm btn-white">
-                <span className="icon icon-brand mr-2">
+                <span className="mr-2 icon icon-brand">
                   <span className="fab fa-google-play" />
                 </span>{" "}
-                <span className="d-inline-block text-left">
+                <span className="text-left d-inline-block">
                   <small className="font-weight-normal d-block">
                     Available on
                   </small>{" "}
@@ -1054,10 +1090,10 @@ const HomePage = () => {
                 />
               </Link>
               <div
-                className="d-flex text-center justify-content-center align-items-center"
+                className="text-center d-flex justify-content-center align-items-center"
                 role="contentinfo"
               >
-                <p className="font-weight-normal font-small mb-0">
+                <p className="mb-0 font-weight-normal font-small">
                   Copyright © Your Paradise Park{" "}
                   <span className="current-year">2021</span>. All rights
                   reserved.

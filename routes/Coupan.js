@@ -29,6 +29,16 @@ const CoupanCrud = {
     }
   },
 
+  getone: async function (req, res) {
+    try {
+      // console.log(req.body.id)
+      let user = await coupanCode.find().sort({ _id: -1 });
+      res.json({ user });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
   delete: async function (req, res) {
     try {
       // console.log(req.body.id)
