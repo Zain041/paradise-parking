@@ -6,22 +6,34 @@ const AccordionTwo = ({ checkoutPageTwo }) => {
 
     const [servicesOne, setservicesOne] = useState(12)
     const [servicesTwo, setservicesTwo] = useState(14)
+    // const [discount,setDiscount]=useState(0)
+    const [discountValue,setdiscountValue]=useState(false)
     const [code, setcode] = useState(false)
     const context = useContext(contextData)
-
+    console.log(code)
     const acceptConditions = (e) => {
-        setChecked(e.target.checked)
-        let discount
-        if (code) {
-            let discount2 = code && code.map((item)=>{
-                return item.discount
-            })
-            console.log(discount2[0])
-            discount = discount2[0]
+        setChecked(Number(e.target.checked))
+        // if(discountValue){
+        //     let orignalPrice=context.totalPrice+servicesOne
+        //     const discn=orignalPrice*discount/100
+        //     console.log(discn)
+            
+        // }
+        let discount=10
+        if (discountValue) {
+            // // let discount2 = code && code.map((item)=>{
+            // //     return item.discount
+            // // })
+            // console.log(discount2[0])
+            // discount = discount2[0]
             discount = context.totalPrice * discount / 100
             console.log(discount)
         }
-        if (e.target.checked) {
+        if (Number(e.target.checked)) {
+            // console.log(parseInt(context.totalPrice)+parseInt(servicesOne))
+            const n1=context.totalPrice
+            const n2=servicesOne
+            console.log(n1+n2)
             context.updatePrice(context.totalPrice + servicesOne - (discount  ? discount : null), context.subTotal + servicesOne)
             console.log(context.totalPrice)
         } else {
@@ -30,13 +42,16 @@ const AccordionTwo = ({ checkoutPageTwo }) => {
     }
     const secondServiceCount = (e) => {
         setChecked(e.target.checked)
+        // if(discountValue){
+        //     alert('hello')
+        // }
         let discount
-        if (code) {
-            let discount2 = code && code.map((item)=>{
-                return item.discount
-            })
-            console.log(discount2[0])
-            discount = discount2[0]
+        if (discountValue) {
+            // let discount2 = code && code.map((item)=>{
+            //     return item.discount
+            // })
+            // console.log(discount2[0])
+            // discount = discount2[0]
             discount = context.totalPrice * discount / 100
             console.log(discount)
         }
@@ -49,16 +64,19 @@ const AccordionTwo = ({ checkoutPageTwo }) => {
     }
     useEffect(() => {
 
-        axios.get("/api/coupon_gets").then((res) => {
+        // axios.get("/api/coupon_gets").then((res) => {
 
-            setcode(res.data.user)
+        //     setcode(res.data.user)
 
 
-        })
-        // console.log(code)
+        // })
+        // // console.log(code)
+        setdiscountValue(context.booking.discountValue)
+        // setDiscount(context.booking.discount)
 
     }, [])
-
+    // console.log(discount)
+    console.log(discountValue)
     return (
         <>
             <div class="row">

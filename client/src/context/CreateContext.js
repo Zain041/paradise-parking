@@ -1,12 +1,11 @@
-import { createContext } from 'react';
+import { createContext } from "react";
 
 export const contextData = createContext({
   user: null,
   isAuthenticated: false,
   isAdmin: false,
   isVerified: false,
-  loading:false,
-
+  loading: false,
 
   // user Auth
   login: (itm) => {},
@@ -15,10 +14,9 @@ export const contextData = createContext({
   logoutUser: () => {},
 
   //   booking _details
-  booking:null,
-  subTotal:0,
-  totalPrice:0,
+  booking: null,
+  subTotal: 0,
+  totalPrice: 0,
   newBooking: (itm) => {},
   updatePrice: (itm) => {},
-
 });

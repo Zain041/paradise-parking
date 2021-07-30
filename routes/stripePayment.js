@@ -224,12 +224,20 @@ router.post("/paypal/charge", async (req, res) => {
   }
 });
 
-//fetch payments details of user by id means invoice data of single user
+router.get("/alluserinvoices", async (req, res) => {
+  try {
+    const userInvoices = await PaymentSchema.find();
 
+    res.send({ userInvoices });
+  } catch (error) {
+    console.log("could not fetch the invoice data", error);
+  }
+});
+
+//fetch payments details of user by id means invoice data of single user
 router.get("/invoice/:id", async (req, res) => {
   const user = req.params.id;
   try {
-    console.log(user);
     const userInvoices = await PaymentSchema.find({ user });
     res.send({ userInvoices });
   } catch (error) {
