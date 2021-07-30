@@ -134,8 +134,10 @@ router.post("/addComment", async (req, res) => {
 });
 router.get("/getComments", async (req, res) => {
   try {
+
     const allcomment = await Comment.find();
     res.json({ allcomment });
+    
   } catch (err) {
     return res.status(500).send("Server Error");
   }
