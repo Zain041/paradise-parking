@@ -1,30 +1,41 @@
 import React,{useState} from 'react'
 import axios     from 'axios'
 import {Redirect} from 'react-router-dom'
-const CreateBlog = () => {
+import {withRouter} from 'react-router-dom';
+const CreateBlog = (props) => {
     const [formData, setFormData] = useState({
     title: "",
     description: "",
-    image: "",
+    avatar: "",
   });
 
   const changeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(e.target.value)
   };
   const handleChangeThumbnail = (e) => {
     const target = e.target;
     const files = target.files;
     if (files) {
       const file = files[0];
-      setFormData({ ...formData, image: file });
+      setFormData({ ...formData, avatar: file });
+      console.log(file)
     }
   };
-  const handleSubmit = async () => {
-    const res = await axios.post("/api/createpost", formData);
-    // if(res){
-    //   <Redirect to='/adminpanel'/>
-    //   console.log('redirect')
-    // }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    console.log(formData)
+    const form = new FormData()
+    form.append("avatar",formData.avatar)
+    form.append("title",formData.title)
+    
+    form.append("description",formData.description)
+    console.log(form)
+    const res = await axios.post("/api/createpost", form);
+    if(res){
+      props.bookingToggle()
+     
+    }
   };
 
     return (
@@ -34,7 +45,7 @@ const CreateBlog = () => {
           <div class=" col-md-offset-2">
             <h1>Create post</h1>
 
-            <form onSubmit={handleSubmit} method="POST">
+            <form onSubmit={handleSubmit} >
               <div class="form-group has-error">
                 {/* <label for="slug">
                   Slug <span class="require">*</span>{" "}
@@ -46,7 +57,7 @@ const CreateBlog = () => {
                 <input
                   type="file"
                   className="form-control"
-                  name="image"
+                  name="avatar"
                   accept="image/*"
                   onChange={handleChangeThumbnail}
                 />
@@ -89,4 +100,4 @@ const CreateBlog = () => {
     )
 }
 
-export default CreateBlog
+export default withRouter(CreateBlog)

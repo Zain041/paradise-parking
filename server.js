@@ -7,7 +7,9 @@ require("dotenv").config();
 const connectDB = require("./DB/Connection");
 
 connectDB();
-
+app.get("/",(req,res)=>{
+  res.send("api working")
+})
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
