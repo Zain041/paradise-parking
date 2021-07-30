@@ -12,7 +12,7 @@ router.post("/createpost", async (req, res) => {
       desc: description,
     });
     await newObject.save();
-    res.send({ newObject });
+    res.send({ newObject }); 
   } catch (err) {
     return res.status(500).send("Server Error");
   }
