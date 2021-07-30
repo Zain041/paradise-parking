@@ -28,7 +28,7 @@ const GoogleLogins = ({ message }) => {
   return (
     <div>
       <GoogleLogin
-        clientId='775874346546-c6bd203r87sv76uqmdvtb7gmfpv71a8v.apps.googleusercontent.com'
+        clientId='116590966711-hhor3kk06ouf480i7upadf6uu2f8lh2t.apps.googleusercontent.com'
         render={(renderProps) => (
           <button className='btn btn-block' onClick={renderProps.onClick}>
             {message} with Google

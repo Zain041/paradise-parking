@@ -7,7 +7,9 @@ require("dotenv").config();
 const connectDB = require("./DB/Connection");
 
 connectDB();
-
+app.get("/",(req,res)=>{
+  res.send("api working")
+})
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -27,9 +29,13 @@ app.use(express.static("./build"));
 // app.get('/', (req, res) => {
 //     res.json("works now")
 // })
-app.get("*", (req, res) => {
-  res.sendFile(path.dirname(__dirname, "build", "index.html"));
-});
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.dirname(__dirname, "client", "build", "index.html"));
+  });
+}
 
 const port = process.env.PORT || 4000;
 app.listen(port, (req, res) => {

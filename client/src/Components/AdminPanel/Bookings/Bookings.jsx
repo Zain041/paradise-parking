@@ -16,8 +16,8 @@ const Bookings = () => {
 
   return (
     <>
-      <div className="row content-page">
-        <div className="col-12 ">
+      <div  className="row  content-page ">
+        <div className="col-12  ">
           <div className="card content">
             <h2 className="text-center mt-3">All Bookings List</h2>
             <div className="card-body " style={{ overflowX: 'auto', marginTop: '30px' }} >

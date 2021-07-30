@@ -64,6 +64,7 @@ const Provider = ({ children }) => {
     try {
       const res = await axios(config);
       console.log(res.data);
+     
       dispatch({
         type: 'LOGIN_USER',
         payload: res.data,

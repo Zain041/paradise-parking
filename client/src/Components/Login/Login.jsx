@@ -107,10 +107,11 @@ const Login = () => {
                       Sign in
                     </button>
                     <br />
-                    <GoogleLogins message={'SignIn'} />
+                   
+                  </form>
+                  <GoogleLogins message={'SignIn'} />
                     <br />
                     <FacebookLogins message={'SignIn'} />
-                  </form>
                   {/* <div className="mt-3 mb-4 text-center"><span className="font-weight-normal">or login with</span>
                                     </div>
                                     <div className="btn-wrapper my-4 text-center">

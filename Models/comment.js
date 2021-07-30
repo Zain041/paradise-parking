@@ -1,18 +1,20 @@
 const mongoose = require("mongoose");
 
-const blogSchema = new mongoose.Schema(
+const commentSchema = new mongoose.Schema(
   {
-    // user: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   required: true,
-    //   ref: "User",
-    // },
-    title: {
-      type: String,
+      postId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+     
     },
+    userName: {
+      type: String,
+     
+    },
+   
     desc: {
       type: String,
-      unique: true,
+     
     },
     imageUrl: {
       type: String,
@@ -24,4 +26,4 @@ const blogSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-module.exports = mongoose.model("Blog", blogSchema);
+module.exports = mongoose.model("Comment", commentSchema);

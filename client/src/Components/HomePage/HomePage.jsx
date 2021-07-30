@@ -970,7 +970,7 @@ const HomePage = () => {
               <span className="h5">Hot Links</span>
               <ul className="footer-links mt-2">
                 <li>
-                  <Link to="#">Blog</Link>
+                  <Link to="/blogs">Blog</Link>
                 </li>
                 <li>
                   <Link to="#">Products</Link>
@@ -1002,6 +1002,12 @@ const HomePage = () => {
                 </li>
                 <li>
                   <Link to="#">License</Link>
+                </li>
+                <li>
+                  <Link to="/privacy-policy">Privacy</Link>
+                </li>
+                <li>
+                  <Link to="/terms-of-use">terms</Link>
                 </li>
               </ul>
             </div>

@@ -1,39 +1,54 @@
 import React, { useEffect, useState } from 'react';
 
 import { AdminPageScriptsRun } from './AdminScriptsRun';
+import CreateBlog from './AdminBlog/createblog/CreateBlog'
 import UsersList from './UsersList/UsersList';
 import Header from '../checkout/Header';
 import Dashboard from './Dashboard/Dashboard';
 import Bookings from './Bookings/Bookings';
 import AdminProfileList from "./AdminProfile/AdminProfile"
+
 import {Link} from 'react-router-dom'
+
 const AdminPanel = () => {
   const [bookings, setBookings] = useState(true);
   const [dashboard, setDashboard] = useState(false);
   const [users, setUsers] = useState(false);
   const [Admin, setAdmin] = useState(false);
+  const [AdminBlog, setAdminBlog] = useState(false);
 
 
   const dashboardToggle = () => {
     setBookings(false);
     setUsers(false);
+    setAdminBlog(false)
     setDashboard(true);
   };
   const bookingToggle = () => {
     setDashboard(false);
     setUsers(false);
+    setAdminBlog(false)
     setBookings(true);
   };
   const showUsers = () => {
     setDashboard(false);
     setBookings(false);
+    setAdminBlog(false)
     setUsers(true);
   }
   const AdminProfiles = () => {
     setDashboard(false);
     setBookings(false);
+    setAdminBlog(false)
     setUsers(false);
     setAdmin(true)
+  }
+  const AdminBlogs = () => {
+    setDashboard(false);
+    setBookings(false);
+    setAdminBlog(true)
+    setUsers(false);
+    setAdmin(false)
   }
     
 
@@ -46,7 +61,7 @@ const AdminPanel = () => {
       <Header />
       <div className='container-fluid'>
         {/* Begin page */}
-        <div className='wrapper'>
+        <div style={{flexDirection:'row'}} className='wrapper'>
           {/* ========== Left Sidebar Start ========== */}
           <div className='leftside-menu leftside-menu-detached'>
             <div className='leftbar-user'>
@@ -79,6 +94,12 @@ const AdminPanel = () => {
                 <div onClick={bookingToggle} className='side-nav-link'>
                   <i className='uil-calender' />
                   <span> Bookings </span>
+                </div>
+              </li>
+              <li className='side-nav-item'>
+                <div onClick={AdminBlogs} className='side-nav-link'>
+                  <i className='uil-calender' />
+                  <span> Admin Blogs </span>
                 </div>
               </li>
               <li className='side-nav-item' onClick={showUsers}>
@@ -795,10 +816,13 @@ const AdminPanel = () => {
             </div>
             <div className='clearfix' />
           </div>
+          <div className="content-pages">
           {dashboard && <Dashboard />}
           {bookings && <Bookings />}
           {users && <UsersList />}
           {Admin && <AdminProfileList/>}
+          {AdminBlog && <CreateBlog bookingToggle={bookingToggle}/>}
+          </div>
         </div>{' '}
       </div>
       {/* END Container */}

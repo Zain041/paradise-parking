@@ -36,7 +36,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
- 
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -59,5 +58,4 @@
     "node-sass": "^6.0.1"
   },
   "proxy": "http://localhost:4000"
- 
 }
