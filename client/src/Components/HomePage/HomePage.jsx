@@ -1003,6 +1003,12 @@ const HomePage = () => {
                 <li>
                   <Link to="#">License</Link>
                 </li>
+                <li>
+                  <Link to="/privacy-policy">Privacy</Link>
+                </li>
+                <li>
+                  <Link to="/terms-of-use">terms</Link>
+                </li>
               </ul>
             </div>
             <div className="col-12 col-xl-4 mb-5 mb-xl-0">

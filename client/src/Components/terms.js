@@ -3,7 +3,7 @@ import React from 'react'
 export default function terms() {
     return (
         <div style={{margin:'30px'}}>
-            <h1>Terms</h1>
+            <h1>Terms of use</h1>
             You may be asked to provide personal information anytime you interact with us or one of our affiliates, such as when you use one of our mobile apps. The types of information we collect depends on how you use our services. We collect information in a few different ways:
 
 1. When you give it to us or give us permission to obtain it

@@ -23,8 +23,8 @@ const App = () => {
       <Suspense fallback={<LoadingComponent />}>
         <Route exact path="/login" component={Login} />
         <Route exact path="/" component={HomePage} />
-        <Route exact path="/privacy" component={privacy} />
-        <Route exact path="/terms" component={terms} />
+        <Route exact path="/privacy-policy" component={privacy} />
+        <Route exact path="/terms-of-use" component={terms} />
         <Route exact path="/register" component={Register} />
         {/* blog routes */}
         <Route exact path="/getpost" component={HomePage} />
